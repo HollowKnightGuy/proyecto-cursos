@@ -1,0 +1,22 @@
+{
+    "name": "usuario/proyecto-cursos",
+    "autoload": {
+        "psr-4": {
+            "Usuario\\ProyectoCursos\\": "./",
+            "Controllers\\" :  "./Controllers",
+            "Models\\" : "./Models",
+            "Lib\\" :  "./Lib"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alejandro",
+            "email": "99648035+amartingonz@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.5",
+        "firebase/php-jwt": "*",
+        "phpmailer/phpmailer": "^6.7"
+    }
+}
