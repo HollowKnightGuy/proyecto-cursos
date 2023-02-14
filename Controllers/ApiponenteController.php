@@ -70,7 +70,9 @@
                 $ponente = new Ponente();
                 $datos_ponente = json_decode(file_get_contents("php://input"));
 
-                if($ponente -> validarDatos($datos_ponente)){
+                $validacion = $ponente -> validarDatos($datos_ponente);
+
+                if(gettype($validacion) === "boolean"){
                     $ponente -> setNombre($datos_ponente -> nombre);
                     $ponente -> setApellidos($datos_ponente -> apellidos);
                     $ponente -> setImagen($datos_ponente -> imagen);
@@ -79,24 +81,24 @@
 
                     if($ponente -> crear()){
                         http_response_code(200);
-                        $result = json_decode(ResponseHttp::statusMessage(200,"Ponente creado correctamente"));
+                        $response = json_decode(ResponseHttp::statusMessage(200,"Ponente creado correctamente"));
                     }else{
                         http_response_code(404);
-                        $result = json_decode(ResponseHttp::statusMessage(404,"No se ha podido crear el ponente"));
+                        $response = json_decode(ResponseHttp::statusMessage(404,"No se ha podido crear el ponente"));
                     }
 
                 }else{
                     http_response_code(404);
-                    $result = json_decode(ResponseHttp::statusMessage(404,"Error al validar los datos"));
+                    $response = json_decode(ResponseHttp::statusMessage(404, $validacion));
                 }
 
 
             }else{
 
-                $result = json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
+                $response = json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
             }
 
-            $this->pages->render("read",['result' => json_encode($result)]);
+            $this->pages->render("read",['response' => json_encode($response)]);
 
         }
 

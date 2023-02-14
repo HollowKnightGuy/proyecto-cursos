@@ -34,6 +34,7 @@
                 $usuario = new Usuario();
                 $datos_usuario = json_decode(file_get_contents("php://input"));
                 $validacion = $usuario -> validarDatos($datos_usuario);
+                
                 if(gettype($validacion) == "boolean"){
                     $contraseniaEncrip = Security::encriptaPassw($datos_usuario -> password);
 
