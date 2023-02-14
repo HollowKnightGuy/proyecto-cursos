@@ -65,60 +65,52 @@
 
         public function crearPonente(){
 
-            if($_SERVER['REQUEST_METHOD']=='POST'){
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-                $ponente=new Ponente();
-                $datos_ponente=json_decode(file_get_contents("php://input"));
+                $ponente = new Ponente();
+                $datos_ponente = json_decode(file_get_contents("php://input"));
 
-                if($ponente->validarDatos($datos_ponente)){
+                if($ponente -> validarDatos($datos_ponente)){
+                    $ponente -> setNombre($datos_ponente -> nombre);
+                    $ponente -> setApellidos($datos_ponente -> apellidos);
+                    $ponente -> setImagen($datos_ponente -> imagen);
+                    $ponente -> setTags($datos_ponente -> tags);
+                    $ponente -> setRedes($datos_ponente -> redes);
 
-                    //asignamos los datos al ponente
-                    /*private string $nombre;
-                    private string $apellidos;
-                    private string $imagen;
-                    private string $tags;
-                    private string $redes;*/
-
-                    $ponente->setNombre($datos_ponente->nombre);
-                    $ponente->setApellidos($datos_ponente->apellidos);
-                    $ponente->setImagen($datos_ponente->imagen);
-                    $ponente->setTags($datos_ponente->tags);
-                    $ponente->setRedes($datos_ponente->redes);
-
-                    if($ponente->crear()){
+                    if($ponente -> crear()){
                         http_response_code(200);
-                        $result=json_decode(ResponseHttp::statusMessage(200,"Ponente creado correctamente"));
+                        $result = json_decode(ResponseHttp::statusMessage(200,"Ponente creado correctamente"));
                     }else{
                         http_response_code(404);
-                        $result=json_decode(ResponseHttp::statusMessage(404,"No se ha podido crear el ponente"));
+                        $result = json_decode(ResponseHttp::statusMessage(404,"No se ha podido crear el ponente"));
                     }
 
                 }else{
                     http_response_code(404);
-                    $result=json_decode(ResponseHttp::statusMessage(404,"Error al validar los datos"));
+                    $result = json_decode(ResponseHttp::statusMessage(404,"Error al validar los datos"));
                 }
 
 
             }else{
 
-                $result=json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
+                $result = json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
             }
 
-            $this->pages->render("read",['result'=> json_encode($result)]);
+            $this->pages->render("read",['result' => json_encode($result)]);
 
         }
 
         public function borrarPonente($id){
-            if($_SERVER['REQUEST_METHOD']=='DELETE'){
-
-                $ponente=new Ponente();
-                if($ponente->borrarPonente($id)){
+            if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+                
+                $ponente = new Ponente();
+                if($ponente -> borrarPonente($id)){
                     http_response_code(200);
-                    $result=json_decode(ResponseHttp::statusMessage(200,"Ponente borrado correctamente"));
+                    $result = json_decode(ResponseHttp::statusMessage(200,"Ponente borrado correctamente"));
                 }else{
 
                     http_response_code(404);
-                    $result=json_decode(ResponseHttp::statusMessage(404,"No se ha podido borrar el ponente"));
+                    $result = json_decode(ResponseHttp::statusMessage(404,"No se ha podido borrar el ponente"));
                 }
 
             }

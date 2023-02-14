@@ -40,7 +40,7 @@
    });
 
 
-    Router::add('PUT','ponente/:id',function(int $ponenteid){
+    Router::add('PUT','ponente/:id',function($ponenteid){
         (new ApiponenteController()) -> actualizaPonente($ponenteid);
    });
 

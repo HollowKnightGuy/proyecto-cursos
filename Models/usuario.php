@@ -6,6 +6,7 @@
     use PDO;
     use PDOException;
     use Lib\BaseDatos;
+    use Lib\Security;
 
 
     class Usuario extends BaseDatos{
@@ -21,18 +22,9 @@
         private string $token_exp;
 
 
-        public function __construct($args = [])
+        public function __construct()
         {
             parent::__construct();
-            $this -> id = $args['id'] ?? null;
-            $this -> nombre = $args['nombre'] ?? '';
-            $this -> apellidos = $args['apellidos'] ?? '';
-            $this -> email = $args['email'] ?? '';
-            $this -> password = $args['password'] ?? '';
-            $this -> rol = $args['rol'] ?? 'user';
-            $this -> confirmado = $args['confirmado'] ?? FALSE;
-            $this -> token = $args['token'] ?? '';
-            $this -> token_exp = $args['token_exp'] ?? 0;
         }
 
 
@@ -132,21 +124,40 @@
         );
     }
 
-    public function registro($datos){
-        $statement = $this -> prepara ("INSERT INTO ponentes(id, nombre, apellidos, email, password, rol, confirmado) VALUES (:id, :nombre, :apellidos, :email, :password, :rol, :confirmado)");
+    public function existe($email):bool{
 
-        $statement -> bindParam(":id", $datos -> id, PDO::PARAM_STR);
-        $statement -> bindParam(":nombre", $datos -> nombre, PDO::PARAM_STR);
-        $statement -> bindParam(":apellidos", $datos -> apellidos, PDO::PARAM_STR);
-        $statement -> bindParam(":apellidos", $datos -> apellidos, PDO::PARAM_STR);
-        $statement -> bindParam(":email", $datos -> email, PDO::PARAM_STR);
-        $statement -> bindParam(":password", $datos -> password, PDO::PARAM_STR);
-        $statement -> bindParam(":rol", $datos -> rol, PDO::PARAM_STR);
-        $statement -> bindParam(":confirmado", $datos -> confirmado, PDO::PARAM_STR);
-
+        $sql = ("SELECT email FROM usuarios WHERE email = :email");
+        $consulta = $this -> prepara($sql);
+        $consulta -> bindParam(':email', $email);
 
         try{
-            $statement = $statement -> execute();
+            $consulta -> execute();
+            if($consulta -> rowCount() == 1){
+                $response = true;
+            }else{
+                $response = false;
+            }
+        }catch(PDOException $err){
+            $response = false;
+        }
+        return $response;
+
+    }
+
+
+    public function registro(){
+        $statement = $this -> prepara("INSERT INTO usuarios(nombre, apellidos, email, password) VALUES (:nombre, :apellidos, :email, :password)");
+
+        $statement -> bindParam(":nombre", $this -> nombre, PDO::PARAM_STR);
+        $statement -> bindParam(":apellidos", $this -> apellidos, PDO::PARAM_STR);
+        $statement -> bindParam(":email", $this -> email, PDO::PARAM_STR);
+        $statement -> bindParam(":password", $this -> password, PDO::PARAM_STR);
+        // $statement -> bindParam(":rol", $this -> rol, PDO::PARAM_STR);
+        // $statement -> bindParam(":confirmado", $this -> confirmado, PDO::PARAM_STR);
+
+        
+        try{
+            $statement -> execute();
             return true;
         }catch(\PDOException $e){
             return false;
@@ -155,13 +166,42 @@
 
 
 
-    public function validarDatos($datos_usuario):bool{
+    public function validarDatos($datos_usuario):string|bool{
+        $nombreval = "/^[a-zA-Z ]+$/";
+        $emailval = "/^[A-z0-9\\._-]+@[A-z0-9][A-z0-9-]*(\\.[A-z0-9_-]+)*\\.([A-z]{2,6})$/";
 
-        if(!empty($datos_usuario -> nombre) && !empty($datos_usuario -> apellidos) && !empty($datos_usuario -> email) && !empty($datos_usuario -> password) && !empty($datos_usuario -> rol) && !empty($datos_usuario -> confirmado)){
-            return true;
-        }else{
-            return false;
+        // La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.
+        $passwval = "/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/";
+        
+        if(empty($datos_usuario -> nombre) ||
+            preg_match($nombreval, $datos_usuario -> nombre) === 0){
+            $message = "El nombre solo puede contener letras y espacios";
         }
+
+        else if(empty($datos_usuario -> apellidos) ||
+            preg_match($nombreval, $datos_usuario -> apellidos) === 0){
+            $message = "El apellido solo puede contener letras y espacios";
+        }
+
+        else if(empty($datos_usuario -> email) ||
+            preg_match($emailval, $datos_usuario -> email) === 0){
+            $message = "El email debe tener el siguiente formato 'correoejemplo@server.dominio'";
+        }
+
+        else if(empty($datos_usuario -> password) ||
+            preg_match($passwval, $datos_usuario -> password) === 0){
+            $message = "La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula. NO puede tener otros símbolos.";
+        }
+
+        else if($this -> existe($datos_usuario -> email)){
+            $message = "El correo ya existe en la base de datos";
+        }
+        if(isset($message)){
+            return $message;
+        }else{
+            return true;
+        }
+        
     }
 
 
