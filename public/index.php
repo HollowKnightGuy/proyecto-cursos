@@ -22,10 +22,13 @@
 
     Router::add('GET','auth',function(){require '../views/auth.php';});
 
+
+    //Ruta para obtener todos los ponentes
     Router::add('GET','ponente',function(){
         (new ApiponenteController()) -> getAll();
     });
 
+    //Ruta para obtener datos de un ponente
     Router::add('GET','ponente/:id',function(int $ponenteid){
          (new ApiponenteController()) -> getPonente($ponenteid);
     });
@@ -35,20 +38,25 @@
         (new ApiponenteController())->crearPonente();
     });
     
+    //Ruta para borrar ponente
     Router::add('DELETE','ponente/:id',function(int $ponenteid){
         (new ApiponenteController()) -> borrarPonente($ponenteid);
-   });
+    });
 
-
+    //Ruta para editar ponente
     Router::add('PUT','ponente/:id',function($ponenteid){
         (new ApiponenteController()) -> actualizaPonente($ponenteid);
-   });
+    });
 
-   Router::add('POST','usuario/crear',function(){
+    //Ruta para registrar un usuario
+    Router::add('POST','usuario/crear',function(){
         (new UsuarioController()) -> registro();
     });
 
-
+    //Ruta para loguearse como usuario
+    Router::add('POST','usuario/login',function(){
+        (new UsuarioController()) -> login();
+    });
     
     Router::dispatch();
 

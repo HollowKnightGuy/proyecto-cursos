@@ -170,7 +170,7 @@
             }
 
             public function findOne($id){
-                $statement = "SELECT * FROM ponentes WHERE id=$id;";
+                $statement = "SELECT * FROM ponentes WHERE id = $id;";
 
                 try{
                     $statement = $this -> conexion -> consulta($statement);
@@ -184,7 +184,7 @@
 
                 $nombreval = "/^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s]+$/";
                 $tagval = "/^[0-9a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s]+$/";
-                $redesval = "/^([ig:|tw:|fb:]+[-_0-9a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s])+$/";
+                $redesval = "/^[0-9a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s:_-.,]+$/";
                 $imgval = "/^.*\.(jpg|png|jpeg)$/";
 
                 if(empty($datos_ponente -> nombre) ||
@@ -223,17 +223,17 @@
 
             public function crear(){
 
-                $statement = $this -> conexion->prepara("INSERT INTO ponentes(nombre,apellidos,imagen,tags,redes) VALUES (:nombre,:apellidos,:imagen,:tags,:redes)");
+                $statement = $this -> conexion -> prepara("INSERT INTO ponentes(nombre,apellidos,imagen,tags,redes) VALUES (:nombre,:apellidos,:imagen,:tags,:redes)");
 
-                $statement->bindParam(":nombre",$this->nombre,PDO::PARAM_STR);
-                $statement->bindParam(":apellidos",$this->apellidos,PDO::PARAM_STR);
-                $statement->bindParam(":imagen",$this->imagen,PDO::PARAM_STR);
-                $statement->bindParam(":tags",$this->tags,PDO::PARAM_STR);
-                $statement->bindParam(":redes",$this->redes,PDO::PARAM_STR);
+                $statement -> bindParam(":nombre",$this -> nombre,PDO::PARAM_STR);
+                $statement -> bindParam(":apellidos",$this -> apellidos,PDO::PARAM_STR);
+                $statement -> bindParam(":imagen",$this -> imagen,PDO::PARAM_STR);
+                $statement -> bindParam(":tags",$this -> tags,PDO::PARAM_STR);
+                $statement -> bindParam(":redes",$this -> redes,PDO::PARAM_STR);
 
 
                 try{
-                    $statement = $statement->execute();
+                    $statement = $statement -> execute();
                     return true;
                 }catch(\PDOException $e){
                     return false;
@@ -243,11 +243,11 @@
 
             
             public function borrarPonente($id){
-                $statement = $this -> conexion->prepara("DELETE FROM ponentes WHERE id = :id");
-                $statement->bindParam(":id",$id);
+                $statement = $this -> conexion -> prepara("DELETE FROM ponentes WHERE id = :id");
+                $statement -> bindParam(":id",$id);
 
                 try{
-                    $statement = $statement->execute();
+                    $statement = $statement -> execute();
                     return true;
                 }catch(\PDOException $e){
                     return false;
@@ -256,19 +256,19 @@
 
 
             public function actualiza($ponenteid){
-                $statement = $this -> conexion->prepara("UPDATE ponentes SET nombre = :nombre, apellidos = :apellidos, imagen = :imagen, tags = :tags, redes = :redes WHERE id=:id");
+                $statement = $this -> conexion -> prepara("UPDATE ponentes SET nombre = :nombre, apellidos = :apellidos, imagen = :imagen, tags = :tags, redes = :redes WHERE id = :id");
 
 
-                $statement->bindParam(":nombre",$this->nombre,PDO::PARAM_STR);
-                $statement->bindParam(":apellidos",$this->apellidos,PDO::PARAM_STR);
-                $statement->bindParam(":imagen",$this->imagen,PDO::PARAM_STR);
-                $statement->bindParam(":tags",$this->tags,PDO::PARAM_STR);
-                $statement->bindParam(":redes",$this->redes,PDO::PARAM_STR);
-                $statement->bindParam(":id",$ponenteid,PDO::PARAM_INT);
+                $statement -> bindParam(":nombre",$this -> nombre,PDO::PARAM_STR);
+                $statement -> bindParam(":apellidos",$this -> apellidos,PDO::PARAM_STR);
+                $statement -> bindParam(":imagen",$this -> imagen,PDO::PARAM_STR);
+                $statement -> bindParam(":tags",$this -> tags,PDO::PARAM_STR);
+                $statement -> bindParam(":redes",$this -> redes,PDO::PARAM_STR);
+                $statement -> bindParam(":id",$ponenteid,PDO::PARAM_INT);
 
 
                 try{
-                    $statement = $statement->execute();
+                    $statement = $statement -> execute();
                     return true;
                 }catch(\PDOException $e){
                     return false;

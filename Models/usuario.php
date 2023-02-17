@@ -124,6 +124,17 @@
         );
     }
 
+    public function infoUserParaToken(){
+        $statement = $this -> prepara("SELECT id, email FROM usuarios WHERE email = :email;");
+        $statement -> bindParam(":email", $this -> email, PDO::PARAM_STR);
+        try{
+            $statement -> execute();
+            return $statement -> fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            exit($e -> getMessage());
+        }
+    }
+
     public function existe($email):bool{
 
         $sql = ("SELECT email FROM usuarios WHERE email = :email");
@@ -152,12 +163,32 @@
         $statement -> bindParam(":apellidos", $this -> apellidos, PDO::PARAM_STR);
         $statement -> bindParam(":email", $this -> email, PDO::PARAM_STR);
         $statement -> bindParam(":password", $this -> password, PDO::PARAM_STR);
-        // $statement -> bindParam(":rol", $this -> rol, PDO::PARAM_STR);
-        // $statement -> bindParam(":confirmado", $this -> confirmado, PDO::PARAM_STR);
-
-        
+                
         try{
             $statement -> execute();
+            return true;
+        }catch(\PDOException $e){
+            var_dump($e);die;
+            return false;
+        }
+    }
+
+    public function login(){
+        $statement = $this -> prepara("SELECT password FROM usuarios WHERE email = :email");
+
+        $statement -> bindParam(":email", $this -> email, PDO::PARAM_STR);
+        try{
+            $statement -> execute();
+            if($statement -> rowCount() == 1){
+                if(Security::validaPassw($this -> password, $statement -> fetchAll(\PDO::FETCH_ASSOC)[0]['password'])){
+                    return true;
+                }else{
+                    
+                    var_dump($this -> password);die;
+                }
+            }else{
+                $response = false;
+            }
             return true;
         }catch(\PDOException $e){
             return false;
@@ -166,12 +197,12 @@
 
 
 
-    public function validarDatos($datos_usuario):string|bool{
+    public function validarDatosRegistro($datos_usuario):string|bool{
         $nombreval = "/^[a-zA-Z ]+$/";
         $emailval = "/^[A-z0-9\\._-]+@[A-z0-9][A-z0-9-]*(\\.[A-z0-9_-]+)*\\.([A-z]{2,6})$/";
 
         // La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.
-        $passwval = "/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/";
+        $passwval = "/^(?=\w*\d)(?=\w*[A-ZÑ])(?=\w*[a-zñ])\S{8,16}$/";
         
         if(empty($datos_usuario -> nombre) ||
             preg_match($nombreval, $datos_usuario -> nombre) === 0){
@@ -203,6 +234,29 @@
         }
         
     }
+
+    public function validarDatosLogin($datos_usuario):string|bool{
+        $emailval = "/^[A-z0-9\\._-]+@[A-z0-9][A-z0-9-]*(\\.[A-z0-9_-]+)*\\.([A-z]{2,6})$/";
+
+        
+        if(empty($datos_usuario -> email) ||
+            preg_match($emailval, $datos_usuario -> email) === 0){
+            $message = "El email debe tener el siguiente formato 'correoejemplo@server.dominio'";
+        }
+
+        
+        if(isset($message)){
+            return $message;
+        }else{
+            if($this -> existe($datos_usuario -> email)){
+                return true;
+            } else{
+                $message = "El email no esta registrado";
+                return $message;
+            }
+        }
+    }
+    
 
 
 }
