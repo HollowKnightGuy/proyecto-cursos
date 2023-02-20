@@ -24,25 +24,25 @@
         (new PonenteController()) -> getAll();
     });
 
-    //Ruta para obtener datos de un ponente
-    Router::add('GET','ponente/:id',function(int $ponenteid){
-         (new ApiponenteController()) -> getPonente($ponenteid);
-    });
-
     //Ruta para crear ponente
     Router::add('POST','ponente/crear',function(){
         (new ApiponenteController())->crearPonente();
     });
     
     //Ruta para borrar ponente
-    Router::add('DELETE','ponente/:id',function(int $ponenteid){
-        (new ApiponenteController()) -> borrarPonente($ponenteid);
+    Router::add('GET','ponente/borrar/:id',function(int $ponenteid){
+        (new PonenteController()) -> borrarPonente($ponenteid);
     });
 
     //Ruta para editar ponente
-    Router::add('PUT','ponente/:id',function($ponenteid){
-        (new ApiponenteController()) -> actualizaPonente($ponenteid);
+    Router::add('GET','ponente/actualizar/:id',function($ponenteid){
+        (new PonenteController()) -> actualizaPonente($ponenteid);
     });
+
+    Router::add('POST','ponente/actualizar/:id',function($ponenteid){
+        (new PonenteController()) -> actualizaPonente($ponenteid);
+    });
+
 
     //Ruta para registrar un usuario
     Router::add('GET','usuario/crear',function(){

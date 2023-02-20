@@ -56,7 +56,7 @@
             if($PonenteArr==[]){
                 $response = json_encode(ResponseHttp::statusMessage(400,'No hay ponentes'));
             }else{
-                $response = json_encode($PonenteArr);
+                return $PonenteArr;
             }
             $this -> pages -> render('read',['response' => $response]);
         }
@@ -100,71 +100,63 @@
         }
 
         public function borrarPonente($id){
-            if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
-                
-                $ponente = new Ponente();
-                if($ponente -> borrarPonente($id)){
-                    http_response_code(200);
-                    $result = json_decode(ResponseHttp::statusMessage(200,"Ponente borrado correctamente"));
-                }else{
+            $ponente = new Ponente();
+            if($ponente -> borrarPonente($id)){
+                http_response_code(200);
+                $result = json_decode(ResponseHttp::statusMessage(200,"Ponente borrado correctamente"));
+            }else{
 
-                    http_response_code(404);
-                    $result = json_decode(ResponseHttp::statusMessage(404,"No se ha podido borrar el ponente"));
-                }
-
+                http_response_code(404);
+                $result = json_decode(ResponseHttp::statusMessage(404,"No se ha podido borrar el ponente"));
             }
 
             $this->pages->render("read",['result'=> json_encode($result)]);
         }
 
 
-        public function actualizaPonente($ponenteid): void{
-        if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
-
+        public function actualizaPonente($ponenteid, $data): bool{
+            $data = json_decode($data);
             $datos_ponente = $this->ponente->findOne($ponenteid);
 
             if ($datos_ponente !== false) {
 
                 $ponente = Ponente::fromArray($datos_ponente);
-                $datos = json_decode(file_get_contents("php://input"));
+                $validacion = $ponente -> validarDatos($data);
+                
+                if (gettype($validacion) === "boolean"){
 
-                if ($ponente->validarDatos($datos)){
+                    //reescribimos los data del ponente
+                    $ponente -> setNombre($data -> nombre);
+                    $ponente -> setApellidos($data -> apellidos);
+                    $ponente -> setImagen($data -> imagen);
+                    $ponente -> setTags($data -> tags);
+                    $ponente -> setRedes($data -> redes);
 
-                    //reescribimos los datos del ponente
-                    $ponente->setNombre($datos->nombre);
-                    $ponente->setApellidos($datos->apellidos);
-                    $ponente->setImagen($datos->imagen);
-                    $ponente->setTags($datos->tags);
-                    $ponente->setRedes($datos->redes);
-
-                    if ($ponente->actualiza($ponenteid)) {
-                        http_response_code(200);
-                        $result = json_decode(ResponseHttp::statusMessage(200, "Ponente actualizado"));
+                    if ($ponente -> actualiza($ponenteid)) {
+                        return true;
                     }
                     else {
-                        http_response_code(404);
-                        $result = json_decode(ResponseHttp::statusMessage(404, "No se ha podido actualizar el ponente"));
+                        http_response_code(400);
+                        $result = json_decode(ResponseHttp::statusMessage(400, "Algo ha salido mal"));
+                        return $result;
                     }
                 }
                 else {
                     http_response_code(400);
                     $result = json_decode(ResponseHttp::statusMessage(400, "Algo ha salido mal"));
+                    return $result;
                 }
             }
             else {
                 http_response_code(404);
                 $result = json_decode(ResponseHttp::statusMessage(404, "No ha encontrado el ponente"));
+                return $result;
             }
         }
-        else {
-            $result = json_decode(ResponseHttp::statusMessage(400, "Método no permitido, se debe usar PUT"));
-        }
-
-        $this->pages->render('read', ['result' => json_encode($result)]);
     }
     
 
 
 
 
-    }
+    

@@ -26,12 +26,31 @@
 
         public function getPonente($id){
             $ponente = $this -> apiponente -> getPonente($id);
-            $this -> pages -> render('ponente/mostrar', ['ponentes' => $ponente]);
         }
         
 
-        // public function actualizar($id){
-        //     $ponente = $this -> apiponente -> actualizar
-        // }
+        public function actualizaPonente($id){
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                $actualizar = $this -> apiponente -> actualizaPonente($id, json_encode($_POST['data']));
+                if(gettype($actualizar) === "boolean"){
+                    header('Location: '.$_ENV['BASE_URL'].'ponente');
+                }
+            } else{
+                $this -> pages -> render('ponente/editar', ['ponente' => $this -> apiponente -> getPonente($id)['Ponentes'][0]]);
+            }
+        }
+
+        public function crearPonente(){
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                $data = $_POST['data'];
+                $this -> apiponente -> crearPonente($data);
+            }
+            
+        }
+
+        public function borrarPonente($id){
+            $this -> apiponente -> borrarPonente($id);
+            header('Location: '.$_ENV['BASE_URL'].'ponente');
+        }
 
     }
