@@ -198,19 +198,19 @@
                 }
 
                 else if(empty($datos_ponente -> imagen) ||
-                preg_match($imgval, $datos_ponente -> imagen) === 0){
+                    preg_match($imgval, $datos_ponente -> imagen) === 0){
                     $message = "La imagen debe tener el siguiente formato: nombreimagen.jpg/png/jpeg";
                 }
 
                 else if(empty($datos_ponente -> tags) ||
-                preg_match($tagval, $datos_ponente -> tags) === 0){
-                    $message = "Al menos un tag es requerido y los tags deben tener el siguiente formato: #nombre1_tag#nombre2_tag";
+                    preg_match($tagval, $datos_ponente -> tags) === 0){
+                    $message = "Al menos un tag es requerido y los tags deben tener el siguiente formato: Tag1 Tag2";
 
                 }
 
                 else if(empty($datos_ponente -> redes) ||
                     preg_match($redesval, $datos_ponente -> redes) === 0){
-                    $message = "Al menos una red es requerida. No se admiten simbolos. Formato: ig:/tw:/fb:nombre_usuario, para poner varias no se pondran espacios";
+                    $message = "Al menos una red es requerida. No se admiten simbolos. Formato: red_1 red_2";
                 }
 
                 if(isset($message)){
@@ -225,11 +225,11 @@
 
                 $statement = $this -> conexion -> prepara("INSERT INTO ponentes(nombre,apellidos,imagen,tags,redes) VALUES (:nombre,:apellidos,:imagen,:tags,:redes)");
 
-                $statement -> bindParam(":nombre",$this -> nombre,PDO::PARAM_STR);
-                $statement -> bindParam(":apellidos",$this -> apellidos,PDO::PARAM_STR);
-                $statement -> bindParam(":imagen",$this -> imagen,PDO::PARAM_STR);
-                $statement -> bindParam(":tags",$this -> tags,PDO::PARAM_STR);
-                $statement -> bindParam(":redes",$this -> redes,PDO::PARAM_STR);
+                $statement -> bindParam(":nombre", $this -> nombre, PDO::PARAM_STR);
+                $statement -> bindParam(":apellidos", $this -> apellidos, PDO::PARAM_STR);
+                $statement -> bindParam(":imagen", $this -> imagen, PDO::PARAM_STR);
+                $statement -> bindParam(":tags", $this -> tags, PDO::PARAM_STR);
+                $statement -> bindParam(":redes", $this -> redes, PDO::PARAM_STR);
 
 
                 try{

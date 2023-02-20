@@ -14,7 +14,6 @@
 
         public function __construct()
         {
-            ResponseHttp::setHeaders();
             $this -> ponente = new Ponente();
             $this -> pages = new Pages();
         }
@@ -35,7 +34,7 @@
             if($PonenteArr==[]){
                 $response = json_encode(ResponseHttp::statusMessage(400,'No hay ponentes'));
             }else{
-                $response = json_encode($PonenteArr);
+                return $ponentes;
             }
             $this -> pages -> render('read',['response' => $response]);
             
@@ -66,7 +65,6 @@
         public function crearPonente(){
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
                 $ponente = new Ponente();
                 $datos_ponente = json_decode(file_get_contents("php://input"));
 
@@ -94,11 +92,10 @@
 
 
             }else{
-
                 $response = json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
             }
 
-            $this->pages->render("read",['response' => json_encode($response)]);
+            $this -> pages -> render("read", ['response' => json_encode($response)]);
 
         }
 

@@ -163,12 +163,12 @@
         $statement -> bindParam(":apellidos", $this -> apellidos, PDO::PARAM_STR);
         $statement -> bindParam(":email", $this -> email, PDO::PARAM_STR);
         $statement -> bindParam(":password", $this -> password, PDO::PARAM_STR);
-                
+        
         try{
             $statement -> execute();
             return true;
         }catch(\PDOException $e){
-            var_dump($e);die;
+            var_dump($e);
             return false;
         }
     }
@@ -255,6 +255,20 @@
                 return $message;
             }
         }
+    }
+
+    public function updateToken($exp): bool{
+        $token = $this -> token;
+        $email = $this -> email;
+        $statement = "UPDATE usuarios SET token = '$token' WHERE email = '$email'";
+
+        $this -> consulta($statement);
+
+        $statement = "UPDATE usuarios SET token_exp = '$exp' WHERE email = '$email'";
+
+        $this -> consulta($statement);
+
+        return $this -> filasAfectadas() > 0;
     }
     
 

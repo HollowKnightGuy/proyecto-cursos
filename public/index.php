@@ -2,30 +2,26 @@
 
     require_once __DIR__.'../../vendor/autoload.php';
     use Dotenv\Dotenv;
-    use Models\Ponente;
     use Lib\ResponseHttp;
     use Lib\Router;
     use Controllers\ApiponenteController;
+    use Controllers\ApiUsuarioController;
+    use Controllers\PonenteController;
     use Controllers\UsuarioController;
+
+    require_once '../views/layout/header.php';
+
+
 
 
     $dotenv = Dotenv::createImmutable(__DIR__);
-    $dotenv->safeLoad();
+    $dotenv -> safeLoad();  
 
-    http_response_code(202);
-    $array = ["estado" => '202', "mensaje" => 'Estamos en el index principal'];
-    echo json_encode($array);
-    
-    //echo ResponseHttp::statusMessage(404,'La página de ponentes no existe');
-
-    Router::add('GET','proyecto-cursos',function(){echo 'saludo';});
-
-    Router::add('GET','auth',function(){require '../views/auth.php';});
 
 
     //Ruta para obtener todos los ponentes
     Router::add('GET','ponente',function(){
-        (new ApiponenteController()) -> getAll();
+        (new PonenteController()) -> getAll();
     });
 
     //Ruta para obtener datos de un ponente
@@ -49,15 +45,19 @@
     });
 
     //Ruta para registrar un usuario
-    Router::add('POST','usuario/crear',function(){
+    Router::add('GET','usuario/crear',function(){
         (new UsuarioController()) -> registro();
     });
 
     //Ruta para loguearse como usuario
-    Router::add('POST','usuario/login',function(){
+    Router::add('GET','usuario/login',function(){
         (new UsuarioController()) -> login();
     });
     
+
     Router::dispatch();
+
+
+require_once '../views/layout/footer.php';
 
 ?>

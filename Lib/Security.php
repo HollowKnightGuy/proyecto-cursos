@@ -10,8 +10,8 @@
     class Security{
 
         final public static function clavesecreta(){
-            $dotenv = Dotenv::createImmutable(dirname(__DIR__.'/'));
-            $dotenv -> load();
+            $dotenv = Dotenv::createImmutable(__DIR__.'/..');
+            $dotenv -> safeLoad();
             return $_ENV['SECRET_KEY'];
         }
 
@@ -30,14 +30,32 @@
             }
         }
 
-        final public static function crearToken(string $key, array $data) {
+        final public static function crearToken(string $key, array $data){
             $time = strtotime("now");
-            $token = array(
-                "iat" => $time,
-                "exp" => $time + 3600,
-                "data" => $data
-            );
-            return JWT::encode($token, $key, 'HS256') ;
+            $token =array(
+                "iat"=>$time,//tiempo en el que creamos el JWT, cuando se inicia el token
+                "exp"=>$time + 3600, // el token expira en 1 hora
+                "data"=> $data
+                );
+                return $token;
+               }
+               
+
+        final public static function createToken($usuario, $email): string{
+            $key = Security::clavesecreta();
+            $token = Security::crearToken($key, [$email]);
+            $encodedToken = JWT::encode($token, $key, 'HS256');
+            $usuario -> setToken($encodedToken);
+            $usuario -> setEmail($email);
+            $usuario -> updateToken($token['exp']);
+            return $encodedToken;
+        } 
+
+
+        final public static function validateToken(): bool|array{
+            $info = self::getToken();
+
+            return $info -> data ?? false;
         }
 
 
