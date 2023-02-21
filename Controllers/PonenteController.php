@@ -18,18 +18,28 @@
             $this -> apiponente = new ApiponenteController();
         }
 
-        public function getAll(){
+
+    /**
+     * LLama a la api para que le devuelva los datos de toods los ponentes
+     * @access public
+     * @return void
+     */
+
+        public function getAll():void{
             $ponentes = $this -> apiponente -> getAll();
             $this -> pages -> render('ponente/mostrar', ['ponentes' => $ponentes]);
             // TODO: MANDAR PONENTES A VISTA
         }
 
-        public function getPonente($id){
-            $ponente = $this -> apiponente -> getPonente($id);
-        }
-        
 
-        public function actualizaPonente($id){
+    /**
+     * LLama a la api para para actualizar un Ponente mandandole los datos de la vista
+     * @access public
+     * @param id id del ponente a actualizar
+     * @return void
+     */
+
+        public function actualizaPonente($id):void{
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $actualizar = $this -> apiponente -> actualizaPonente($id, json_encode($_POST['data']));
                 if(gettype($actualizar) === "boolean"){
@@ -42,7 +52,15 @@
             }
         }
 
-        public function crearPonente(){
+
+
+    /**
+     * LLama a la api para para crear un Ponente mandandole los datos de la vista
+     * @access public
+     * @return void
+     */
+
+        public function crearPonente():void{
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $data = json_encode($_POST['data']);
                 
@@ -57,6 +75,13 @@
             }
             
         }
+
+
+    /**
+     * LLama a la api para para borrar un Ponente mandandole los datos de la vista
+     * @access public
+     * @return void
+     */
 
         public function borrarPonente($id){
             $this -> apiponente -> borrarPonente($id);

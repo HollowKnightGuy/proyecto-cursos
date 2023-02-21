@@ -8,7 +8,6 @@
 </head>
 <body>
     <header>
-        <?= $_SESSION['login'] ?? "" ?>
         <h1><a href="<?= $_ENV['BASE_URL'] ?>">Proyecto Cursos</a></h1>
         <?php if(isset($_SESSION['login'])): ?>
         <h2>Usuario logueado: <?= $_SESSION['nombreUsuario'] ?? "" ?></h2>  

@@ -17,8 +17,21 @@
             $this -> ponente = new Ponente();
             $this -> pages = new Pages();
         }
+            /**
+     * Comprueba que los datos pasados por post esten correctos para loguear a un usuario
+     * LLeva a cabo las validaciones
+     * @access public
+     * @param mixed $datos insertados de usuario
+     * @return string|bool
+     */
 
-        public function getAll(){
+
+    /**
+     * Devuelve todos los datos de todos los ponentes como array de objetos
+     * @access public
+     * @return array
+     */
+        public function getAll():array{
             $ponentes = $this -> ponente->findAll();
             $PonenteArr = [];
             if(!empty($ponentes)){
@@ -40,7 +53,16 @@
             
         }
 
-        public function getPonente($id){
+
+
+    /**
+     * Devuelve un array de un objeto ponente a partir de un id
+     * @access public
+     * @param id Id del ponente
+     * @return Ponente
+     */
+
+        public function getPonente($id): array{
             $ponentes = $this -> ponente->findOne($id);
             $PonenteArr = [];
             if(!empty($ponentes)){
@@ -62,7 +84,14 @@
         }
 
 
-        public function crearPonente($data = null){
+     /**
+     * LLama al modelo ponente para inserta un Ponente en la base de datos
+     * @access public
+     * @param data Informacion del ponente escrita por el cliente
+     * @return bool|string
+     */
+
+        public function crearPonente($data):bool|string{
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $ponente = new Ponente();
@@ -96,7 +125,16 @@
             }
         }
 
-        public function borrarPonente($id){
+
+
+    /**
+     * LLama al modelo ponente para borrar un Ponente de la base de datos
+     * @access public
+     * @param id id del ponente a borrar
+     * @return void
+     */
+
+        public function borrarPonente($id):void{
             $ponente = new Ponente();
             if($ponente -> borrarPonente($id)){
                 http_response_code(200);
@@ -111,9 +149,20 @@
         }
 
 
-        public function actualizaPonente($ponenteid, $data){
+
+
+        
+    /**
+     * LLama al modelo ponente para actualizar un Ponente en la base de datos
+     * @access public
+     * @param id id del ponente a borrar
+     * @param data nueva informacion para actualizar
+     * @return bool|string
+     */
+
+        public function actualizaPonente($id, $data):bool|string{
             $data = json_decode($data);
-            $datos_ponente = $this->ponente->findOne($ponenteid);
+            $datos_ponente = $this->ponente->findOne($id);
 
             if ($datos_ponente !== false) {
 
@@ -129,7 +178,7 @@
                     $ponente -> setTags($data -> tags);
                     $ponente -> setRedes($data -> redes);
 
-                    if ($ponente -> actualiza($ponenteid)) {
+                    if ($ponente -> actualiza($id)) {
                         return true;
                     }
                     else {

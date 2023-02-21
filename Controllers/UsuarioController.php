@@ -18,7 +18,15 @@
             $this -> pages = new Pages();
         }
 
-        public function login(){
+        
+    /**
+     * LLama a la api mandandole los datos de la vista para para que se encargue de
+     * comprobar que todo ha ido bien y confirmar el logueo del cliente
+     * @access public
+     * @return void
+     */
+
+        public function login():void{
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $login = $this -> apiusuario -> login(json_encode($_POST['data']));
                 if(gettype($login) === "boolean"){
@@ -33,7 +41,17 @@
             }
         }
 
-        public function registro(){
+
+
+
+    /**
+     * LLama a la api mandandole los datos de la vista para para que se encargue de 
+     * comprobar que todo ha ido bien y confirmar el registro del cliente
+     * @access public
+     * @return void
+     */
+
+        public function registro():void{
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $login = $this -> apiusuario -> registro(json_encode($_POST['data']));
                 if(gettype($login) === "boolean"){
@@ -45,6 +63,14 @@
                 $this -> pages -> render('usuario/registrar');
             }
         }
+
+
+        
+    /**
+     * Destruye la session existente y manda a la pagina de inicio
+     * @access public
+     * @return void
+     */
 
         public function cerrarSesion(){
             session_destroy();

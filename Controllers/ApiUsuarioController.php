@@ -17,6 +17,14 @@
         }
 
 
+    
+    /**
+     * Comprueba que los datos pasados por post esten correctos para loguear a un usuario
+     * LLeva a cabo las validaciones
+     * @access public
+     * @param mixed $datos insertados de usuario
+     * @return string|bool
+     */
         public function login($data){
             $data = json_decode($data);
             $usuario = $this -> usuario;
@@ -38,10 +46,15 @@
         }
     
 
-        
 
-
-        public function registro($data){
+    /**
+     * Registra un usuario en la base de datos
+     * LLeva a cabo las validaciones
+     * @access public
+     * @param mixed $datos insertados de usuario
+     * @return string|bool
+     */
+        public function registro($data):string|bool{
             $data = json_decode($data);
 
             $usuario = $this -> usuario;
