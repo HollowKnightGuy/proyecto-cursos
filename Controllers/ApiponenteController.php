@@ -45,11 +45,11 @@
                 $PonenteArr["Ponentes"] = [];
             }
             if($PonenteArr==[]){
-                $response = json_encode(ResponseHttp::statusMessage(400,'No hay ponentes'));
+                $response = json_decode(ResponseHttp::statusMessage(400,'No hay ponentes'));
+                return $response -> message;
             }else{
                 return $ponentes;
             }
-            $this -> pages -> render('read',['response' => $response]);
             
         }
 
@@ -71,16 +71,14 @@
                 foreach($ponentes as $fila){
                     $PonenteArr["Ponentes"][] = $fila;
                 }
-            }else{
-                $PonenteArr["message"] = json_decode(ResponseHttp::statusMessage(400, 'No hay ponentes'));
-                $PonenteArr["Ponentes"] = [];
             }
-            if($PonenteArr==[]){
-                $response = json_encode(ResponseHttp::statusMessage(400,'No hay ponentes'));
+            
+            if($PonenteArr == []){
+                $response = json_decode(ResponseHttp::statusMessage(400,'No hay ponentes'));
+                return $response -> message;
             }else{
                 return $PonenteArr;
             }
-            $this -> pages -> render('read',['response' => $response]);
         }
 
 
@@ -111,7 +109,7 @@
                     }else{
                         http_response_code(404);
                         $response = json_decode(ResponseHttp::statusMessage(404,"No se ha podido crear el ponente"));
-                        return $response;
+                        return $response -> message;
                     }
 
                 }else{
@@ -121,7 +119,7 @@
 
             }else{
                 $response = json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
-                return $response;
+                return $response -> message;
             }
         }
 

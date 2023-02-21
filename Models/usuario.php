@@ -311,8 +311,7 @@
                         if(Security::validaPassw($this -> password, $statement -> fetchAll(\PDO::FETCH_ASSOC)[0]['password'])){
                             return true;
                         }else{
-                            
-                            var_dump($this -> password);die;
+                            return 'No se ha podido loguear';
                         }
                     }else{
                         $response = false;

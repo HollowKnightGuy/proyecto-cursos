@@ -28,7 +28,6 @@
         public function getAll():void{
             $ponentes = $this -> apiponente -> getAll();
             $this -> pages -> render('ponente/mostrar', ['ponentes' => $ponentes]);
-            // TODO: MANDAR PONENTES A VISTA
         }
 
 
