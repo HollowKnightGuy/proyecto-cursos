@@ -1,5 +1,5 @@
 <?php
-
+    session_start();
     require_once __DIR__.'../../vendor/autoload.php';
     use Dotenv\Dotenv;
     use Lib\ResponseHttp;
@@ -28,7 +28,6 @@
         (new PonenteController())->crearPonente();
     });
 
-    //Ruta para crear ponente
     Router::add('POST','ponente/crear',function(){
         (new PonenteController())->crearPonente();
     });
@@ -48,8 +47,15 @@
     });
 
 
+
+
+
     //Ruta para registrar un usuario
     Router::add('GET','usuario/crear',function(){
+        (new UsuarioController()) -> registro();
+    });
+
+    Router::add('POST','usuario/crear',function(){
         (new UsuarioController()) -> registro();
     });
 
@@ -58,6 +64,15 @@
         (new UsuarioController()) -> login();
     });
     
+    Router::add('POST','usuario/login',function(){
+        (new UsuarioController()) -> login();
+    });
+        
+
+    //Ruta para hacer logout como usuario
+    Router::add('GET','usuario/logout',function(){
+        (new UsuarioController()) -> cerrarSesion();
+    });
 
     Router::dispatch();
 

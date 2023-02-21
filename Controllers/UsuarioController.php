@@ -20,20 +20,34 @@
 
         public function login(){
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                $data = $_POST['data'];
-                $this -> apiusuario -> login(json_encode($data));
+                $login = $this -> apiusuario -> login(json_encode($_POST['data']));
+                if(gettype($login) === "boolean"){
+                    $_SESSION['nombreUsuario'] = $_POST['data']['email'];
+                    $_SESSION['login'] = true;
+                    header('Location: '.$_ENV['BASE_URL']);
+                } else{
+                    $this -> pages -> render('usuario/login', ['mensaje' => $login]);
+                }
             } else{
-                $this -> pages -> render('login');
+                $this -> pages -> render('usuario/login');
             }
         }
 
         public function registro(){
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                $data = $_POST['data'];
-                $this -> apiusuario -> registro(json_decode($data));
+                $login = $this -> apiusuario -> registro(json_encode($_POST['data']));
+                if(gettype($login) === "boolean"){
+                    header('Location: '.$_ENV['BASE_URL']);
+                } else{
+                    $this -> pages -> render('usuario/registrar', ['mensaje' => $login]);
+                }
             } else{
-                $this -> pages -> render('registrar');
+                $this -> pages -> render('usuario/registrar');
             }
         }
 
+        public function cerrarSesion(){
+            session_destroy();
+            header("Location: ".$_ENV['BASE_URL']);
+        }
     }

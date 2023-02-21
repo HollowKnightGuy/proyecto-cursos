@@ -1,5 +1,5 @@
 
-<form action="" method="POST">
+<form action="<?= $_ENV['BASE_URL'] ?>usuario/crear" method="POST">
     <label for="Nombre">Nombre:</label>
     <input type="text" name="data[nombre]" id="Nombre">
     <br><br>
@@ -12,5 +12,8 @@
     <label for="Contraseña">Contraseña:</label>
     <input type="text" name="data[contrasenia]" id="Contraseña">
     <br><br>
-    <input type="submit">
+    <input type="submit" value="Registrar">
+    <?php if(isset($mensaje)): ?>
+        <span style="color:red"><?= json_encode($mensaje) ?></span>
+    <?php endif; ?>
 </form>

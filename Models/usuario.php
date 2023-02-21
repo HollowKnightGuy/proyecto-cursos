@@ -157,12 +157,14 @@
 
 
     public function registro(){
-        $statement = $this -> prepara("INSERT INTO usuarios(nombre, apellidos, email, password) VALUES (:nombre, :apellidos, :email, :password)");
+        $statement = $this -> prepara("INSERT INTO usuarios(nombre, apellidos, email, password, rol, confirmado) VALUES (:nombre, :apellidos, :email, :password, :rol, :confirmado)");
 
         $statement -> bindParam(":nombre", $this -> nombre, PDO::PARAM_STR);
         $statement -> bindParam(":apellidos", $this -> apellidos, PDO::PARAM_STR);
         $statement -> bindParam(":email", $this -> email, PDO::PARAM_STR);
         $statement -> bindParam(":password", $this -> password, PDO::PARAM_STR);
+        $statement -> bindParam(":rol", $this -> rol, PDO::PARAM_STR);
+        $statement -> bindParam(":confirmado", $this -> confirmado, PDO::PARAM_STR);
         
         try{
             $statement -> execute();
@@ -200,7 +202,7 @@
     public function validarDatosRegistro($datos_usuario):string|bool{
         $nombreval = "/^[a-zA-Z ]+$/";
         $emailval = "/^[A-z0-9\\._-]+@[A-z0-9][A-z0-9-]*(\\.[A-z0-9_-]+)*\\.([A-z]{2,6})$/";
-
+        
         // La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.
         $passwval = "/^(?=\w*\d)(?=\w*[A-ZÑ])(?=\w*[a-zñ])\S{8,16}$/";
         
@@ -219,9 +221,9 @@
             $message = "El email debe tener el siguiente formato 'correoejemplo@server.dominio'";
         }
 
-        else if(empty($datos_usuario -> password) ||
-            preg_match($passwval, $datos_usuario -> password) === 0){
-            $message = "La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula. NO puede tener otros símbolos.";
+        else if(empty($datos_usuario -> contrasenia) ||
+            preg_match($passwval, $datos_usuario -> contrasenia) === 0){
+            $message = "La contrasena debe tener entre 8 y 16 caracteres, al menos un digito, al menos una minuscula y al menos una mayuscula. NO puede tener otros simbolos.";
         }
 
         else if($this -> existe($datos_usuario -> email)){

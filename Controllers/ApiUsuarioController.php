@@ -9,87 +9,68 @@
 
     class ApiUsuarioController{
 
-        private Pages $pages;
         private Usuario $usuario;
-
 
         public function __construct()
         {
             $this -> usuario = new Usuario();
-            $this -> pages = new Pages();
         }
 
 
-        public function login(){
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        public function login($data){
+            $data = json_decode($data);
+            $usuario = $this -> usuario;
+            $validacion = $usuario -> validarDatosLogin($data);
+            
+            if(gettype($validacion) == "boolean"){
+                $usuario -> setEmail($data -> email);
+                $usuario -> setPassword($data -> contrasenia);
                 
-                $usuario = $this -> usuario;
-                $datos_usuario = json_decode(file_get_contents("php://input"));
-                $validacion = $usuario -> validarDatosLogin($datos_usuario);
-                
-                if(gettype($validacion) == "boolean"){
-                    $usuario -> setEmail($datos_usuario -> email);
-                    $usuario -> setPassword($datos_usuario -> password);
-                    
-                    if($usuario -> login()){
-                        http_response_code(200);
-                        $response = json_decode(ResponseHttp::statusMessage(200,"[ + ] Usuario logueado correctamente"));
-                    }else{
-                        http_response_code(404);
-                        $response = json_decode(ResponseHttp::statusMessage(404,"ERROR: No se ha podido loguear el usuario"));
-                    }
-
+                if($usuario -> login()){
+                    return true;
                 }else{
-                    http_response_code(404);
-                    $response = json_decode(ResponseHttp::statusMessage(404, $validacion));
+                    return 'No se ha podido loguear el usuario';
                 }
 
-
             }else{
-                $response = json_decode(ResponseHttp::statusMessage(404,"ERROR: el método de recogida de datos debe de ser POST"));
+                return $validacion;
             }
-
-            $this -> pages -> render("read",['response' => json_encode($response)]);
         }
+    
 
         
 
 
-        public function registro(){
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                
-                $usuario = $this -> usuario;
-                $datos_usuario = json_decode(file_get_contents("php://input"));
-                $validacion = $usuario -> validarDatosRegistro($datos_usuario);
-                
-                if(gettype($validacion) == "boolean"){
-                    $contraseniaEncrip = Security::encriptaPassw($datos_usuario -> password);
+        public function registro($data){
+            $data = json_decode($data);
 
-                    $usuario -> setNombre($datos_usuario -> nombre);
-                    $usuario -> setApellidos($datos_usuario -> apellidos);
-                    $usuario -> setEmail($datos_usuario -> email);
-                    $usuario -> setPassword($contraseniaEncrip);
-                    
-                    if($usuario -> registro()){
-                        Security::createToken($usuario, $datos_usuario -> email);
-                        http_response_code(200);
-                        $response = json_decode(ResponseHttp::statusMessage(200,"[ + ] Usuario creado correctamente"));
-                    }else{
-                        http_response_code(404);
-                        $response = json_decode(ResponseHttp::statusMessage(404,"ERROR: No se ha podido crear el usuario"));
-                    }
+            $usuario = $this -> usuario;
+            $validacion = $usuario -> validarDatosRegistro($data);
+            
+            if(gettype($validacion) == "boolean"){
+                $contraseniaEncrip = Security::encriptaPassw($data -> contrasenia);
 
+                $usuario -> setNombre($data -> nombre);
+                $usuario -> setApellidos($data -> apellidos);
+                $usuario -> setEmail($data -> email);
+                $usuario -> setPassword($contraseniaEncrip);
+                $usuario -> setRol('user');
+                $usuario -> setConfirmado('no');
+                
+                if($usuario -> registro()){
+                    Security::createToken($usuario, $data -> email);
+                    http_response_code(200);
+                    return true;
                 }else{
-                    http_response_code(404);
-                    $response = json_decode(ResponseHttp::statusMessage(404, $validacion));
+                    return 'No se ha podido registrar el usuario';
                 }
 
-
             }else{
-                $response = json_decode(ResponseHttp::statusMessage(404,"ERROR: el método de recogida de datos debe de ser POST"));
+                return $validacion;
             }
 
-            $this -> pages -> render("read",['response' => json_encode($response)]);
-        }
 
+        }
+    
     }
+    
