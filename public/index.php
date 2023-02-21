@@ -9,24 +9,28 @@
     use Controllers\PonenteController;
     use Controllers\UsuarioController;
 
-    require_once '../views/layout/header.php';
-
-
 
 
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv -> safeLoad();  
 
+    require_once '../views/layout/header.php';
+
 
 
     //Ruta para obtener todos los ponentes
-    Router::add('GET','ponente',function(){
+    Router::add('GET','/',function(){
         (new PonenteController()) -> getAll();
     });
 
     //Ruta para crear ponente
+    Router::add('GET','ponente/crear',function(){
+        (new PonenteController())->crearPonente();
+    });
+
+    //Ruta para crear ponente
     Router::add('POST','ponente/crear',function(){
-        (new ApiponenteController())->crearPonente();
+        (new PonenteController())->crearPonente();
     });
     
     //Ruta para borrar ponente

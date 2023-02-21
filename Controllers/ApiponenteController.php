@@ -62,41 +62,38 @@
         }
 
 
-        public function crearPonente(){
+        public function crearPonente($data = null){
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $ponente = new Ponente();
-                $datos_ponente = json_decode(file_get_contents("php://input"));
-
-                $validacion = $ponente -> validarDatos($datos_ponente);
+                $data = json_decode($data);
+                
+                $validacion = $ponente -> validarDatos($data);
 
                 if(gettype($validacion) === "boolean"){
-                    $ponente -> setNombre($datos_ponente -> nombre);
-                    $ponente -> setApellidos($datos_ponente -> apellidos);
-                    $ponente -> setImagen($datos_ponente -> imagen);
-                    $ponente -> setTags($datos_ponente -> tags);
-                    $ponente -> setRedes($datos_ponente -> redes);
+                    $ponente -> setNombre($data -> nombre);
+                    $ponente -> setApellidos($data -> apellidos);
+                    $ponente -> setImagen($data -> imagen);
+                    $ponente -> setTags($data -> tags);
+                    $ponente -> setRedes($data -> redes);
 
                     if($ponente -> crear()){
-                        http_response_code(200);
-                        $response = json_decode(ResponseHttp::statusMessage(200,"Ponente creado correctamente"));
+                        return true;
                     }else{
                         http_response_code(404);
                         $response = json_decode(ResponseHttp::statusMessage(404,"No se ha podido crear el ponente"));
+                        return $response;
                     }
 
                 }else{
-                    http_response_code(404);
-                    $response = json_decode(ResponseHttp::statusMessage(404, $validacion));
+                    return $validacion;
                 }
 
 
             }else{
                 $response = json_decode(ResponseHttp::statusMessage(404,"Error el método de recogida de datos debe de ser POST"));
+                return $response;
             }
-
-            $this -> pages -> render("read", ['response' => json_encode($response)]);
-
         }
 
         public function borrarPonente($id){
@@ -114,7 +111,7 @@
         }
 
 
-        public function actualizaPonente($ponenteid, $data): bool{
+        public function actualizaPonente($ponenteid, $data){
             $data = json_decode($data);
             $datos_ponente = $this->ponente->findOne($ponenteid);
 
@@ -143,7 +140,7 @@
                 }
                 else {
                     http_response_code(400);
-                    $result = json_decode(ResponseHttp::statusMessage(400, "Algo ha salido mal"));
+                    $result = $validacion;
                     return $result;
                 }
             }

@@ -1,5 +1,5 @@
 
-<form action="" method="POST">
+<form action="<?= $_ENV['BASE_URL'] ?>ponente/crear" method="POST">
     <label for="Nombre">Nombre:</label>
     <input type="text" name="data[nombre]" id="Nombre">
     <br><br>
@@ -14,6 +14,10 @@
     <br><br>
     <label for="Redes">Redes:</label>
     <input type="text" name="data[redes]" id="Redes">
+    <br><br>
+    <?php if(isset($mensaje)): ?>
+        <span style="color:red"><?= json_encode($mensaje) ?></span>
+    <?php endif; ?>
     <br><br>
     <input type="submit">
 </form>

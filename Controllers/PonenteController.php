@@ -33,24 +33,34 @@
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $actualizar = $this -> apiponente -> actualizaPonente($id, json_encode($_POST['data']));
                 if(gettype($actualizar) === "boolean"){
-                    header('Location: '.$_ENV['BASE_URL'].'ponente');
+                    header('Location: '.$_ENV['BASE_URL']);
+                } else{
+                    $this -> pages -> render('ponente/editar', ['ponente' => ($this -> apiponente -> getPonente($id)['Ponentes'][0]), 'mensaje' => $actualizar]);
                 }
             } else{
-                $this -> pages -> render('ponente/editar', ['ponente' => $this -> apiponente -> getPonente($id)['Ponentes'][0]]);
+                $this -> pages -> render('ponente/editar', ['ponente' => ($this -> apiponente -> getPonente($id)['Ponentes'][0])]);
             }
         }
 
         public function crearPonente(){
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                $data = $_POST['data'];
-                $this -> apiponente -> crearPonente($data);
+                $data = json_encode($_POST['data']);
+                
+                $crear = $this -> apiponente -> crearPonente($data);
+                if(gettype($crear) === "boolean"){
+                    header('Location: '.$_ENV['BASE_URL']);
+                } else{
+                    $this -> pages -> render('ponente/crear', ['mensaje' => $crear]);
+                }
+            } else{
+                $this -> pages -> render('ponente/crear');
             }
             
         }
 
         public function borrarPonente($id){
             $this -> apiponente -> borrarPonente($id);
-            header('Location: '.$_ENV['BASE_URL'].'ponente');
+            header('Location: '.$_ENV['BASE_URL']);
         }
 
     }

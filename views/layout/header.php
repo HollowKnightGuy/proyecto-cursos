@@ -8,5 +8,13 @@
 </head>
 <body>
     <header>
-        <h1>Proyecto Cursos</h1>
+        <h1><a href="<?= $_ENV['BASE_URL'] ?>">Proyecto Cursos</a></h1>
+        <br><br>
+        <nav>
+            <a href="<?= $_ENV['BASE_URL'] ?>">Mostrar Ponentes</a><br>
+            <a href="<?= $_ENV['BASE_URL'] ?>ponente/crear">Crear Ponente</a><br>
+            <a href="<?= $_ENV['BASE_URL'] ?>usuario/crear">Registrarse</a><br>
+            <a href="<?= $_ENV['BASE_URL'] ?>usuario/login">Log in</a>
+        </nav>
+        <br><br>
     </header>
