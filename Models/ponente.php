@@ -270,7 +270,7 @@
 
             public function crear():bool{
 
-                $statement = $this -> conexion -> prepara("INSERT INTO ponentess(nombre,apellidos,imagen,tags,redes) VALUES (:nombre,:apellidos,:imagen,:tags,:redes)");
+                $statement = $this -> conexion -> prepara("INSERT INTO ponentes(nombre,apellidos,imagen,tags,redes) VALUES (:nombre,:apellidos,:imagen,:tags,:redes)");
 
                 $statement -> bindParam(":nombre", $this -> nombre, PDO::PARAM_STR);
                 $statement -> bindParam(":apellidos", $this -> apellidos, PDO::PARAM_STR);
