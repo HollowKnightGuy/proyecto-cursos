@@ -432,6 +432,24 @@
 
 
 
+    /**
+     * Devuelve los datos de un usuario desde la base de datos
+     * @access public
+     * @param string email del usuario
+     * @return array
+     */
+    public function findOne($email):array{
+        $statement = "SELECT * FROM ponentes WHERE id = $email;";
+
+        try{
+            $statement = $this -> consulta($statement);
+            return $statement -> fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            exit($e -> getMessage());
+        }
+    }
+
+
 
 }
 ?>

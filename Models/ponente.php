@@ -193,6 +193,7 @@
     /**
      * Devuelve los datos de un ponente desde la base de datos
      * @access public
+     * @param int el id del ponente
      * @return array
      */
             public function findOne($id):array{

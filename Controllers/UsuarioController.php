@@ -53,8 +53,10 @@
 
         public function registro():void{
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                $login = $this -> apiusuario -> registro(json_encode($_POST['data']));
+                $data = json_encode($_POST['data']);
+                $login = $this -> apiusuario -> registro($data);
                 if(gettype($login) === "boolean"){
+                    $this -> enviar_email($data);
                     header('Location: '.$_ENV['BASE_URL']);
                 } else{
                     $this -> pages -> render('usuario/registrar', ['mensaje' => $login]);
@@ -76,4 +78,22 @@
             session_destroy();
             header("Location: ".$_ENV['BASE_URL']);
         }
+
+
+
+
+        
+    /**
+     * Se encarga de mandar a la vista de phpmailer para mandar el correo electronico
+     * @access public
+     * @return void
+     */
+        public function enviar_email($data){
+            $data = json_decode($data);
+            $email = $data -> email;
+            $nombre = $data -> nombre;
+            $apellidos = $data -> apellidos;
+            $this -> pages -> render('manda_email/enviar_email',["email" => $email, "nombre" => $nombre, "apellidos" => $apellidos]);
+        }
+
     }
