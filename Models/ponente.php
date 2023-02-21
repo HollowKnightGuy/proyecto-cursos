@@ -145,7 +145,13 @@
 
 
             
-            public static function fromArray($datos){
+    /**
+     * Convierte un array de datos Ponente en un objeto Ponente
+     * @access public static 
+     * @param mixed array de datos de ponente
+     * @return Ponente
+     */
+            public static function fromArray($datos):Ponente{
 
                 $ponente=new Ponente();
                 $ponente -> setNombre($datos[0]['nombre']);
@@ -158,7 +164,17 @@
         
             }
 
-            public function findAll(){
+
+
+
+
+    /**
+     * Devuelve todos los ponentes desde la base de datos
+     * @access public
+     * @return array
+     */
+
+            public function findAll():array{
                 $statement = "SELECT * FROM ponentes;";
 
                 try{
@@ -169,7 +185,17 @@
                 }
             }
 
-            public function findOne($id){
+
+
+
+
+
+    /**
+     * Devuelve los datos de un ponente desde la base de datos
+     * @access public
+     * @return array
+     */
+            public function findOne($id):array{
                 $statement = "SELECT * FROM ponentes WHERE id = $id;";
 
                 try{
@@ -180,6 +206,16 @@
                 }
             }
 
+
+
+
+
+    /**
+     * Se encarga de validar los datos que se le pasan desde la api
+     * @access public
+     * @param array datos de ponente a validar
+     * @return string|bool
+     */
             public function validarDatos($datos_ponente):string|bool{
 
                 $nombreval = "/^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s]+$/";
@@ -221,7 +257,17 @@
 
             }
 
-            public function crear(){
+
+
+
+
+    /**
+     * Se encarga de insertar los datos de un ponente en la base de datos
+     * @access public
+     * @return bool
+     */
+
+            public function crear():bool{
 
                 $statement = $this -> conexion -> prepara("INSERT INTO ponentes(nombre,apellidos,imagen,tags,redes) VALUES (:nombre,:apellidos,:imagen,:tags,:redes)");
 
@@ -241,8 +287,15 @@
             }
 
 
+
+
+    /**
+     * Se encarga de borrar un ponente en la base de datos
+     * @access public
+     * @return bool
+     */
             
-            public function borrarPonente($id){
+            public function borrarPonente($id):bool{
                 $statement = $this -> conexion -> prepara("DELETE FROM ponentes WHERE id = :id");
                 $statement -> bindParam(":id",$id);
 
@@ -255,7 +308,14 @@
             }
 
 
-            public function actualiza($ponenteid){
+
+
+    /**
+     * Se encarga de actualizar un ponente en la base de datos
+     * @access public
+     * @return bool
+     */
+            public function actualiza($ponenteid):bool{
                 $statement = $this -> conexion -> prepara("UPDATE ponentes SET nombre = :nombre, apellidos = :apellidos, imagen = :imagen, tags = :tags, redes = :redes WHERE id = :id");
 
 

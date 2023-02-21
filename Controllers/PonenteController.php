@@ -35,7 +35,7 @@
     /**
      * LLama a la api para para actualizar un Ponente mandandole los datos de la vista
      * @access public
-     * @param id id del ponente a actualizar
+     * @param int id del ponente a actualizar
      * @return void
      */
 

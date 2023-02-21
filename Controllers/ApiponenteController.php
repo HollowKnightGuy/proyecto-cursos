@@ -58,7 +58,7 @@
     /**
      * Devuelve un array de un objeto ponente a partir de un id
      * @access public
-     * @param id Id del ponente
+     * @param int Id del ponente
      * @return Ponente
      */
 
@@ -87,7 +87,7 @@
      /**
      * LLama al modelo ponente para inserta un Ponente en la base de datos
      * @access public
-     * @param data Informacion del ponente escrita por el cliente
+     * @param array Informacion del ponente escrita por el cliente
      * @return bool|string
      */
 
@@ -130,7 +130,7 @@
     /**
      * LLama al modelo ponente para borrar un Ponente de la base de datos
      * @access public
-     * @param id id del ponente a borrar
+     * @param int id del ponente a borrar
      * @return void
      */
 
@@ -155,8 +155,8 @@
     /**
      * LLama al modelo ponente para actualizar un Ponente en la base de datos
      * @access public
-     * @param id id del ponente a borrar
-     * @param data nueva informacion para actualizar
+     * @param int id del ponente a borrar
+     * @param array nueva informacion para actualizar
      * @return bool|string
      */
 
