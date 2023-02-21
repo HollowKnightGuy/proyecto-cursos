@@ -7,6 +7,7 @@
     <input type="text" name="data[contrasenia]" id="Contraseña">
     <br><br>
     <input type="submit" value="Login">
+    
     <?php if(isset($mensaje)): ?>
         <span style="color:red"><?= json_encode($mensaje) ?></span>
     <?php endif; ?>

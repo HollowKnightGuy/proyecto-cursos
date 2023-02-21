@@ -1,3 +1,5 @@
+<!-- Comprobamos si el usuario esta logueado -->
+
 <?php if(isset($_SESSION['login'])): ?>
 
     <form action="<?= $_ENV['BASE_URL'] ?>ponente/actualizar/<?= $ponente['id'] ?>" method="POST">
@@ -17,6 +19,7 @@
         <input type="text" name="data[redes]" id="Redes" value=<?= $ponente['redes'] ?>>
         <br><br>
         <input type="submit">
+        
         <?php if(isset($mensaje)): ?>
             <span style="color:red"><?= json_encode($mensaje) ?></span>
         <?php endif; ?>

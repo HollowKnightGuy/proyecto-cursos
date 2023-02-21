@@ -8,12 +8,20 @@
 </head>
 <body>
     <header>
+
         <h1><a href="<?= $_ENV['BASE_URL'] ?>">Proyecto Cursos</a></h1>
+        
+        <!-- COMPROBAMOS SI HAY UNA SESION INICIADA -->
         <?php if(isset($_SESSION['login'])): ?>
-        <h2>Usuario logueado: <?= $_SESSION['nombreUsuario'] ?? "" ?></h2>  
+                
+            <h2>Usuario logueado: <?= $_SESSION['nombreUsuario'] ?? "" ?></h2>  
 
         <?php endif; ?>
+
+        
         <br><br>
+
+        
         <nav>
         <?php if(!isset($_SESSION['login'])): ?>
             <a href="<?= $_ENV['BASE_URL'] ?>usuario/crear">Registrarse</a><br>

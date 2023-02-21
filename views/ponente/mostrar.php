@@ -1,5 +1,4 @@
 
-<?php if(isset($_SESSION['login'])): ?>
 
     <table border="1">
         <thead>
@@ -14,7 +13,9 @@
             </tr>
         </thead>
         <tbody>
+            <!-- Recorremos un array de ponentes -->
             <?php foreach($ponentes as $ponente): ?>
+
                 <tr>
                     <td><?= $ponente['id'] ?></td>
                     <td><?= $ponente['nombre'] ?></td>
@@ -30,8 +31,3 @@
         </tbody>
     </table>
 
-<?php else: ?>
-
-    <h1>Necesitasestar logueado para ver los ponentes</h1>
-
-<?php endif; ?>

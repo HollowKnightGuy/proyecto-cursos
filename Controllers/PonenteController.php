@@ -48,7 +48,7 @@
                     $this -> pages -> render('ponente/editar', ['ponente' => ($this -> apiponente -> getPonente($id)['Ponentes'][0]), 'mensaje' => $actualizar]);
                 }
             } else{
-                $this -> pages -> render('ponente/editar', ['ponente' => ($this -> apiponente -> getPonente($id)['Ponentes'])]);
+                $this -> pages -> render('ponente/editar', ['ponente' => ($this -> apiponente -> getPonente($id)['Ponentes'][0])]);
             }
         }
 
