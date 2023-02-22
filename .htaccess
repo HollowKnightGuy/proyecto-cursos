@@ -5,10 +5,7 @@
     Options All -Indexes
     Options -MultiViews
     #ErrorDocument 404 http://localhost/proyecto-cursos/
-    RewriteCond %{SCRIPT_FILENAME} !-d
-    RewriteCond %{SCRIPT_FILENAME} !-f
 
     # RewriteRule ^(.*)/(.*) index.php?controller=$1&action=$2 
-    RewriteRule ^ index.php [QSA,L]
 
 </IfModule>

@@ -5,6 +5,7 @@
     use Lib\ResponseHttp;
     use Lib\Pages;
     use Controllers\ApiUsuarioController;
+    use Lib\Email;
 
     class UsuarioController{
 
@@ -93,7 +94,7 @@
             $email = $data -> email;
             $nombre = $data -> nombre;
             $apellidos = $data -> apellidos;
-            $this -> pages -> render('manda_email/enviar_email',["email" => $email, "nombre" => $nombre, "apellidos" => $apellidos]);
+            (new Email()) -> enviarConfirmacion($email, $nombre, $apellidos);
         }
 
     }

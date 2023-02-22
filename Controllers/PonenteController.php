@@ -83,8 +83,13 @@
      */
 
         public function borrarPonente($id){
-            $this -> apiponente -> borrarPonente($id);
-            header('Location: '.$_ENV['BASE_URL']);
+            if(isset($_SESSION['login'])){
+                $this -> apiponente -> borrarPonente($id);
+                header('Location: '.$_ENV['BASE_URL']);
+            }else{
+                header('Location: '.$_ENV['BASE_URL']);
+
+            }
         }
 
     }

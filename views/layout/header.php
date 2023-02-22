@@ -18,20 +18,23 @@
 
         <?php endif; ?>
 
-        
-        <br><br>
 
-        
+        <br><br>
         <nav>
+
         <?php if(!isset($_SESSION['login'])): ?>
+
             <a href="<?= $_ENV['BASE_URL'] ?>usuario/crear">Registrarse</a><br>
             <a href="<?= $_ENV['BASE_URL'] ?>usuario/login">Log in</a><br>
+
         <?php else: ?>
         
             <a href="<?= $_ENV['BASE_URL'] ?>">Mostrar Ponentes</a><br>
             <a href="<?= $_ENV['BASE_URL'] ?>ponente/crear">Crear Ponente</a><br>
             <a href="<?= $_ENV['BASE_URL'] ?>usuario/logout">Cerrar Sesion</a>
+
         <?php endif; ?>
+        
         </nav>
         <br><br>
     </header>
